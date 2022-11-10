@@ -2,12 +2,14 @@ import "./App.css";
 import Footer from "./components/footer/Footer";
 import Todo from "./container/Todo";
 import { HeaderComp } from "./components/header/HeaderComp";
+import { useState } from "react";
 
 function App() {
+  const [toggle, setToggle] = useState(true)
   return (
     <div>
       <HeaderComp></HeaderComp>
-      <Todo />
+      {toggle && <Todo />}
       <Footer />
     </div>
   );

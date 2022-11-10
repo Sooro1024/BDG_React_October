@@ -1,37 +1,64 @@
-import React, { Component } from "react";
+import React, { memo, useEffect, useState } from "react";
 
-export default class Todo extends Component {
-  state = {
-    todoList: [],
-    text: "",
-  };
+function InputComp({onAddBtnClick}) {
+  const [input, setInput] = useState("");
 
-  handleChange = (evnt) => {
-    this.setState({ text: evnt.target.value });
-  };
-  handleAdd = () => {
-    this.setState({
-      text: "",
-      todoList: [...this.state.todoList, this.state.text],
-    });
-  };
-  render() {
-    const { todoList: todo_list, text } = this.state;
-    return (
-      <>
-        <h2>My ToDo List</h2>
-        <ul>
-          {todo_list.map((elem, index) => (
-            <li key={index}>{elem}</li>
-          ))}
-        </ul>
-        <input
-          placeholder="Input ToDo"
-          value={text}
-          onChange={this.handleChange}
-        ></input>
-        <button onClick={this.handleAdd}>Add</button>
-      </>
-    );
-  }
+  useEffect(() => {
+    console.log(input)
+    return () => {
+      console.log('return function input value', input)
+
+    }
+    }, [input])
+
+  return (
+    <>
+      <input
+        placeholder="Write a todo"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button
+        onClick={() => {
+          onAddBtnClick({value: input, id: new Date().getMilliseconds()});
+          setInput("");
+        }}
+      >
+        Add Todo
+      </button>
+    </>
+  );
 }
+
+function TodoItem({singleTodoText}) {
+  return <li>{singleTodoText}</li>
+}
+
+const MemoizedTodo = memo(TodoItem)
+
+function Todo() {
+  const [lists, setLists] = useState([]);
+
+  const handleAddTodo = (todo) => {
+    //submit change
+    setLists([todo, ...lists, ]);
+  };
+  return (
+    <div>
+      <InputComp onAddBtnClick={handleAddTodo} />
+      <ul>
+        {lists.map((todo) => {
+          const {value, id} = todo;
+          return (
+            <>
+              {console.log({ value, id })}
+              <MemoizedTodo singleTodoText={value} key={id} />
+            </>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
+export default Todo;
