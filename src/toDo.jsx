@@ -1,40 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-export default function() {
+export default function () {
+  const [state, setState] = useState({
+    todos: [],
+    text: "",
+  });
 
-    const [state , setState] = useState({
+  const handleChange = (ev) => {
+    setState((prevState) => ({ ...prevState, text: ev.target.value }));
+  };
 
-        todos:[],
-        text:"",
-    })
+  const handleAdd = (ev) => {
+    setState({
+      text: "",
+      todos: [...state.todos, state.text],
+    });
+  };
 
-
-        const handleChange= (ev)=>{
-            setState({text:ev.target.value})
-
-        };
-        
-       const handleAdd= (ev)=>{
-            setState({
-                text:'',
-                todos:[...state.todos, state.text]})
-
-        };
-
-
-  render() {
-      const {todos,text}= this.state  
-    return (
-      <>
+  return (
+    <>
       <h6>Todo list</h6>
       <ul>
-        
-       {todos.map((el, index)=><li key={index}>{el}</li>)}
-            
+        {state.todos.map((el, index) => (
+          <li key={index}>{el}</li>
+        ))}
       </ul>
-      <input placeholder='Add todo' value={text} onChange={this.handleChange}></input>
+      <input
+        placeholder="Add todo"
+        value={state.text}
+        onChange={handleChange}
+      ></input>
       <button onClick={handleAdd}>Hit to add</button>
-      </>
-    )
-  }
+    </>
+  );
 }
