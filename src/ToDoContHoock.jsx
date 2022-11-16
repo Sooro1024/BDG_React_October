@@ -23,37 +23,31 @@ export default function () {
     setState((prevStat) => ({ ...prevStat, text: ev.target.value }));
   };
   const handelSave = (ev) => {
-    // console.log(state.todos);
-    let val = ev.target.getAttribute("keysave");
-    // console.log(val);
-    state.todos[val] = state.text;
-    // console.log(state.todos[val]);
-    // console.log(state.todos);
+    const index = ev.target.getAttribute("keysave");
 
     setState({
       text: "",
-      todos: [...state.todos],
+      todos: state.todos.map((el, inx) => {
+        if (inx === Number(index)) {
+          return state.text
+        } else {
+          return el
+        }
+      }),
     });
     setStyle({ visibility: "hidden" });
   };
   const handelDelete = (ev) => {
-    let val = ev.target.getAttribute("keydelete");
-    console.log(val)
-     let s= state.todos.filter((item,index) => index !== val);
-     console.log(s)
+    const val = ev.target.name("keydelete");
+    console.log(typeof val)
+     let newTodoList= state.todos.filter((item,index) => index != val);
+     console.log(newTodoList)
 
      setState({
       text: "",
-      todos: [...s],
+      todos: newTodoList,
     });
 
-//     console.log(state.todos[val]);
-//     delete state.todos[val];
-//     setState({
-//       text: "",
-//       todos: [...state.todos],
-//     });
-  };
   return (
     <>
       <h1>To do list Hook</h1>
@@ -62,13 +56,13 @@ export default function () {
           <li key={index}>
             {el}
             <input style={style} onChange={hendelEditChange} />
-            <button keyedit={index} onClick={handelEdit}>
+            <button name={index} onClick={handelEdit}>
               Edit
             </button>
-            <button keydelete={index} onClick={handelDelete}>
+            <button name={index} onClick={handelDelete}>
               Delete
             </button>
-            <button keysave={index} onClick={handelSave}>
+            <button name={index} onClick={handelSave}>
               Save
             </button>
           </li>
