@@ -5,48 +5,68 @@ export default function () {
     todos: [],
     text: "",
   });
-  const [style, setStyle] = useState({ visibility: "hidden" });
+
+  // const [style, setStyle] = useState({ visibility: "hidden" });
+  const [valueInput, setValueInput] = useState(false);
+  const [valueEdit, setValueEdit] = useState();
+  const [type, setType] = useState();
+
+
   const handleChange = (ev) => {
     setState((prevStat) => ({ ...prevStat, text: ev.target.value }));
   };
-  const handleAdd = () => {
+
+
+  const handleAdd = (ev) => {
     setState({
       text: "",
       todos: [...state.todos, state.text],
     });
   };
 
+
+
   const handelEdit = (ev) => {
-    setStyle({ visibility: "visible" });
+    const index = ev.target.name;
+    setType(index);
+    setValueInput(true);
+    // setStyle({ visibility: "visible" });
   };
+
+
   const hendelEditChange = (ev) => {
+    const index = ev.target.name;
+    setValueEdit(index);
     setState((prevStat) => ({ ...prevStat, text: ev.target.value }));
   };
-  const handelSave = (ev) => {
-    const index = ev.target.getAttribute("keysave");
 
+
+  const handelSave = (ev) => {
+    const index = ev.target.name;
+    setType();
     setState({
       text: "",
       todos: state.todos.map((el, inx) => {
         if (inx === Number(index)) {
-          return state.text
+          return state.text;
         } else {
-          return el
+          return el;
         }
       }),
     });
-    setStyle({ visibility: "hidden" });
+    setValueInput(false);
+    // setStyle({ visibility: "hidden" });
   };
-  const handelDelete = (ev) => {
-    const val = ev.target.name("keydelete");
-    console.log(typeof val)
-     let newTodoList= state.todos.filter((item,index) => index != val);
-     console.log(newTodoList)
 
-     setState({
+
+  const handelDelete = (ev) => {
+    const index = ev.target.name;
+
+    setState({
       text: "",
-      todos: newTodoList,
+      todos: state.todos.filter((item, inx) => inx != index),
     });
+  };
 
   return (
     <>
@@ -55,7 +75,12 @@ export default function () {
         {state.todos.map((el, index) => (
           <li key={index}>
             {el}
-            <input style={style} onChange={hendelEditChange} />
+            <input
+              name={index}
+              value={valueEdit == index ? state.text : ""}
+              type={type == index ? "text" : "hidden"}
+              onChange={hendelEditChange}
+            />
             <button name={index} onClick={handelEdit}>
               Edit
             </button>
@@ -70,7 +95,7 @@ export default function () {
       </ul>
       <input
         placeholder="Add todo"
-        value={state.text}
+        value={valueInput === false ? state.text : "Add todo"}
         onChange={handleChange}
       />
       <button onClick={handleAdd}>Hit to add</button>
