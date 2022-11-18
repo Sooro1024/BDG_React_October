@@ -1,34 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from "react";
+import TodoForm from "./components/TodoForm";
+import TodoList from "./components/TodoList";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
+  const [editId, setEditId] = useState();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (editId) {
+      const editTodo = todos.find((i) => i.id === editId);
+      const updatedTodos = todos.map((t) =>
+        t.id === editTodo.id
+          ? (t = { id: t.id, todo })
+          : { id: t.id, todo: t.todo }
+      );
+      setTodos(updatedTodos);
+      setEditId(0);
+      setTodo("");
+    }
+
+    if (todo !== "") {
+      setTodos([{ id: `${todo}-${Date.now()}`, todo }, ...todos]);
+      setTodo("");
+    }
+  };
+
+  const handleDelete = (id) => {
+    const delTodo = todos.filter((to) => to.id !== id);
+    setTodos([...delTodo]);
+  };
+
+  const handleEdit = (id) => {
+    const editTodo = todos.find((i) => i.id === id);
+    setTodo(editTodo.todo);
+    setEditId(id);
+  };
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
+      <div className="container">
+        <h1>Todo List App</h1>
+        <TodoForm
+          handleSubmit={handleSubmit}
+          todo={todo}
+          editId={editId}
+          setTodo={setTodo}
+        />
 
-export default App
+        <TodoList
+          todos={todos}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default App;
