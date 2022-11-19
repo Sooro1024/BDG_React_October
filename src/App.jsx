@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from "react";
+import { TodosCont } from "./containers/TodosCont";
 
-export const App = () => {
+const App = () => {
+  return <TodosCont />;
+};
 
-
-return "Vahan"
-}
+export default App;

@@ -11,3 +11,44 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   monospace;
 }
+
+
+.green {
+  color: green;
+}
+.red {
+  color: red;
+}
+
+.yellow {
+  color: yellow;
+}
+
+
+
+
+.app {
+  display: flex;
+}
+
+
+.column {
+  width: 33%;
+  border: 1px solid black
+}
+
+/* li {
+  display: grid;
+  grid-template-columns: auto ;
+  grid-template-rows: auto auto;
+} */
+
+d-flex {
+  display: flex;
+}
+flex-col {
+  flex-direction: column;
+}
+p {
+  margin: 0;
+}

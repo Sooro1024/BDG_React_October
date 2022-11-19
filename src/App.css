@@ -68,3 +68,14 @@ body {
 .mr-20 {
   margin-right: 20px;
 }
+
+
+.app {
+  display: flex;
+}
+
+
+.column {
+  width: 33%;
+  background-color: #ccc;
+}
