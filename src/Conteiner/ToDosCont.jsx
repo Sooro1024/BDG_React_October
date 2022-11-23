@@ -6,7 +6,7 @@ import { TodoColoum } from "./TodoColoum";
 
 export const TodosCont = () => {
   const [todos, setTodos] = useState([]);
-  const [newElement, setNewElement] = useState({})
+  const [newElement, setNewElement] = useState({});
 
   const lists = useMemo(() => {
     return todos.reduce(
@@ -52,39 +52,11 @@ export const TodosCont = () => {
     console.log(lists);
   }
 
-  const handelEdit = (newElement) => {  
-    
-    console.log(newElement)
-                        //  `/todos/${ev.target.name}`
-    networkProvider.put(`/todos/${newElement._id}`,newElement).then(respond=>
-      {
-        setTodos(prevState=>{
+  // const handelEdit = (newElement) => {
 
-          return prevState.map(el =>{
-            if (el._id === newElement._id)
-            {
-              return ({...el, ...newElement})
-            }
-            return el
-          }
-            )
-
-        })
-      }).catch(error=>console.log(error))
-  
-  
-  };
-  // const handelEdit = (inputTitle,inputName,inputDec,id)=>
-  // {
-  //   const newElement = {
-  //         _id: id,
-  //         title: inputTitle,
-  //         userName: inputName,
-  //         description: inputDec,
-  //         updatedAt: new Date(),
-  //       };
-  //       setNewElement(newElement)
-  //         networkProvider.put(`/todos/${newElement._id}`, newElement).then(respond=>
+  //   console.log(newElement)
+  //                       //  `/todos/${ev.target.name}`
+  //   networkProvider.put(`/todos/${newElement._id}`,newElement).then(respond=>
   //     {
   //       setTodos(prevState=>{
 
@@ -100,13 +72,32 @@ export const TodosCont = () => {
   //       })
   //     }).catch(error=>console.log(error))
 
+  // };
+  const handelEdit = (inputTitle, inputName, inputDec, id) => {
+    const newElement = {
+      _id: id,
+      title: inputTitle,
+      userName: inputName,
+      description: inputDec,
+      // updatedAt: new Date().getUTCDate(),
+    };
+    setNewElement(newElement);
+    networkProvider
+      .put(`/todos/${newElement._id}`, newElement)
+      .then((respond) => {
+        setTodos((prevState) => {
+          return prevState.map((el) => {
+            if (el._id === newElement._id) {
+              return { ...el, ...newElement };
+            }
+            return el;
+          });
+        });
+      })
+      .catch((error) => console.log(error));
+  };
 
-
-  // }
-
-console.log(newElement);
-
-
+  console.log(newElement);
 
   return (
     <>

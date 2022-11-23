@@ -20,7 +20,7 @@ export const Todo = memo(
     const [inputTitle, setTitle] = useState(title);
     const [inputDec, setDec] = useState(description);
     const [update, setUpdate] = useState();
-    const [newElement, setNewElement] = useState()
+    const [newElement, setNewElement] = useState();
 
     const hendelEditChange1 = (ev) => {
       setTitle((prevStat) => ev.target.value);
@@ -44,8 +44,8 @@ export const Todo = memo(
         description: inputDec,
         updatedAt: ev.target.getAttribute("update"),
       };
-      setNewElement(newElement)
-      return newElement
+      setNewElement(newElement);
+      return newElement;
     };
     // console.log(newElement);
     return (
@@ -85,15 +85,18 @@ export const Todo = memo(
             onClick={hendelEditChange4}
           /> */}
 
-
-          <button name={id} onClick={hendelAdd} update={new Date()}>
+          {/* <button name={id} onClick={hendelAdd} update={new Date()}>
             Edit
-          </button>
-          <button onClick={()=>handelEdit(newElement)}>SaveEdit</button> 
-
-
+          </button> */}
+          {/* <button onClick={() => handelEdit(newElement)}>SaveEdit</button> */}
         </div>
-               {/* <button  name={id}  update={new Date()} onClick={()=>handelEdit(inputTitle,inputName,inputDec,id)}>SaveEdit</button> */}
+        <button
+          name={id}
+          update={new Date()}
+          onClick={() => handelEdit(inputTitle, inputName, inputDec, id)}
+        >
+          SaveEdit
+        </button>
         <FontAwesomeIcon onClick={() => handelDelete(id)} icon={faTrashCan} />
       </li>
     );
