@@ -55,7 +55,7 @@ export const TodosCont = () => {
           {lists.todo.map((todo) => (
             <Todo
               key={todo._id}
-              statusClass="red"
+              color="danger"
               id={todo._id}
               title={todo.title}
               description={todo.description}
@@ -69,7 +69,7 @@ export const TodosCont = () => {
           {lists.inProgress.map((todo) => (
             <Todo
               key={todo._id}
-              statusClass="yellow"
+              color="warning"
               id={todo._id}
               title={todo.title}
               description={todo.description}
@@ -83,7 +83,7 @@ export const TodosCont = () => {
           {lists.done.map((todo) => (
             <Todo
               key={todo._id}
-              statusClass="green"
+              color="success"
               id={todo._id}
               title={todo.title}
               description={todo.description}
