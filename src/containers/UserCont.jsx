@@ -7,7 +7,6 @@ import {
   Input,
   Button,
 } from "reactstrap";
-import { TodosCont } from "./TodosCont";
 
 export const UserCont = ({ setUserName, userName }) => {
   const [open, setOpen] = useState(false);
@@ -19,26 +18,24 @@ export const UserCont = ({ setUserName, userName }) => {
   }, []);
 
   return (
-    <>
-      <Modal isOpen={open} toggle={() => setOpen(false)}>
-        <ModalHeader toggle={() => setOpen(false)}>Modal title</ModalHeader>
-        <ModalBody>
-          Hi dear user, please fill your name
-          <Input
-            value={userName}
-            onChange={(ev) => setUserName(ev.target.value)}
-          />
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            disabled={userName ? false : true}
-            color="primary"
-            onClick={() => setOpen(false)}
-          >
-            Sign in
-          </Button>
-        </ModalFooter>
-      </Modal>
-    </>
+    <Modal isOpen={open} toggle={() => setOpen(false)}>
+      <ModalHeader toggle={() => setOpen(false)}>Modal title</ModalHeader>
+      <ModalBody>
+        Hi dear user, please fill your name
+        <Input
+          value={userName}
+          onChange={(ev) => setUserName(ev.target.value)}
+        />
+      </ModalBody>
+      <ModalFooter>
+        <Button
+          disabled={!userName}
+          color="primary"
+          onClick={() => setOpen(false)}
+        >
+          Sign in
+        </Button>
+      </ModalFooter>
+    </Modal>
   );
 };

@@ -67,7 +67,7 @@ export const CreateTodoCont = ({ updateTodoState }) => {
             <Input
               id="userName"
               placeholder="Username"
-              disabled={userName ? true : false}
+              disabled={!!userName}
               name="userName"
               onChange={handelChangeValues}
               value={formValues.userName}
@@ -114,9 +114,9 @@ export const CreateTodoCont = ({ updateTodoState }) => {
           <Button color="danger" onClick={handelCancel}>
             Cancel
           </Button>
-          <button className="btn btn-success " onClick={handelSave}>
+          <Button color="success" onClick={handelSave}>
             Save
-          </button>
+          </Button>
         </ModalFooter>
       </Modal>
     </>

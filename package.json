@@ -22,10 +22,16 @@
   "devDependencies": {
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
+    "@types/reactstrap": "^8.7.2",
     "@vitejs/plugin-react": "^2.2.0",
     "eslint": "^8.27.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.8.0",
     "vite": "^3.2.0"
   }
 }
