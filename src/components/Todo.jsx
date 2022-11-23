@@ -1,31 +1,27 @@
-import React, { Fragment, useState } from 'react';
-import TodoList from './TodoList';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import React, { memo } from "react";
 
-function Todo() {
-    const[lists, setLists] = useState([]);
-    const[input,setInput] =useState("");
-
-    const handleAddTodo=(todo)=> { //submit change
-        setLists([...lists, todo]);
-        setInput("");
-    };   
-  return (
-    <div>
-        <input 
-        placeholder ='Write a todo' 
-        value={input} 
-        onChange={(e) =>setInput(e.target.value)}
-        />
-        <button onClick={() =>handleAddTodo(input)}>Add Todo</button>
-        <ul>
-        {lists.map((todo,index) =>(
-                <Fragment key={index}>
-                    <TodoList todo = {todo}  key={index}/>
-                </Fragment>
-            ))}
-        </ul>
-    </div>
-  )
-}
+export const Todo = memo(
+  ({
+    id,
+    title,
+    description,
+    createdAt,
+    updatedAt,
+    statusClass,
+    handelDelete,
+  }) => {
+    return (
+      <li data-id={id} className={`${statusClass} todoElement`}>
+        {title}
+        <p className="description">{description}</p>
+        <p className="createdAt">createdAt: {createdAt}</p>
+        <p className="updatedAt">updatedAt: {updatedAt}</p>
+        <FontAwesomeIcon onClick={() => handelDelete(id)} icon={faTrashCan} />
+      </li>
+    );
+  }
+);
 
 export default Todo
