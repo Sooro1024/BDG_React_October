@@ -68,3 +68,54 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+ .app {
+  display: flex;
+ }
+ .formm {
+  border: 1px solid black
+ }
+
+ .green {
+  color: green;
+}
+.red {
+  color: red;
+}
+
+.yellow {
+  color: yellow;
+}
+
+
+
+
+.app {
+  display: flex;
+}
+
+
+.column {
+  width: 33%;
+  border: 1px solid black
+}
+
+/* li {
+  display: grid;
+  grid-template-columns: auto ;
+  grid-template-rows: auto auto;
+} */
+
+d-flex {
+  display: flex;
+}
+flex-col {
+  flex-direction: column;
+}
+p {
+  margin: 0;
+}
+.modal {
+  display: grid;
+  grid-template-columns: 50%;
+  /* visibility:hidden */
+}
