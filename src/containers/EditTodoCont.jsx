@@ -1,27 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { networkProvider } from "../network";
 
-export const CreateTodoCont = ({ updateTodoState }) => {
-  const [toggle, setToggle] = useState(false);
-
+export const EditTodoCont = ({
+  updateTodoState,
+  showEditForm,
+  setShowEditForm,
+  currentEditId,
+  todos,
+}) => {
   const [formValues, setFormValues] = useState({
     userName: "",
     description: "",
     title: "",
-    status: "todo",
+    status: "",
   });
 
-  const handelSave = (ev) => {
+  useEffect(() => {
+    if (currentEditId) {
+      const currentTodo = todos.find((el) => el._id === currentEditId);
+      setFormValues({
+        userName: currentTodo.userName,
+        description: currentTodo.description,
+        title: currentTodo.title,
+        status: currentTodo.status,
+      });
+    }
+  }, [currentEditId]);
+
+  const handleSave = (ev) => {
     ev.preventDefault();
+
     networkProvider
-      .post("/todos", formValues)
+      .put(`/todos/${currentEditId}`, formValues)
       .then(({ data }) => {
-        updateTodoState((prevTodos) => [...prevTodos, data]);
+        console.log("RESPONSE FROM SERVER");
+        console.log(data);
+        const newTodos = todos.map((todo) => {
+          if (todo._id === currentEditId) {
+            return {
+              ...todo,
+              ...formValues,
+            };
+          }
+
+          return todo;
+        });
+
+        updateTodoState(newTodos);
       })
       .catch((error) => console.log(error));
+
+    setShowEditForm(false);
+    console.log("Handle Save");
   };
   const handelCancel = () => {
-    setToggle(false);
+    setShowEditForm(false);
   };
 
   const handelChangeValues = (ev) => {
@@ -31,11 +64,11 @@ export const CreateTodoCont = ({ updateTodoState }) => {
     }));
   };
 
-  if (toggle) {
+  if (showEditForm) {
     return (
       <div>
-        <h3>ADD TODO:</h3>
-        <form className="d-flex flex-col" onSubmit={handelSave}>
+        <h3>EDIT TODO:</h3>
+        <form className="d-flex flex-col" onSubmit={handleSave}>
           <label>
             userName
             <input
@@ -81,5 +114,5 @@ export const CreateTodoCont = ({ updateTodoState }) => {
     );
   }
 
-  return <button onClick={() => setToggle(true)}>New Todo</button>;
+  return <div></div>;
 };

@@ -1,11 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+
 import { Todo } from "../components/Todo";
 import { networkProvider } from "../network";
 import { CreateTodoCont } from "./CreateTodoCont";
+import { EditTodoCont } from "./EditTodoCont";
 import { TodoColoum } from "./TodoColoum";
 
 export const TodosCont = () => {
   const [todos, setTodos] = useState([]);
+
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [currentEditId, setCurrentEditId] = useState(null);
 
   const lists = useMemo(() => {
     return todos.reduce(
@@ -48,6 +53,26 @@ export const TodosCont = () => {
     }
   }, []);
 
+  const handleEdit = useCallback(async (id) => {
+    setShowEditForm(true);
+    setCurrentEditId(id);
+    // try {
+    //   console.log("OLD VALUES");
+    //   await networkProvider.put(`/todos/${id}`, {
+    // userName: "EDITEDEDITED",
+    // description: "EDITEDEDITED",
+    // title: "EDITEDEDITED",
+    // status: "todo",
+    //   });
+    //   console.log("IIDDDDDD");
+    //   console.log(id);
+
+    //   // setTodos((prevTodos) => prevTodos.find((el) => el._id === id));
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  });
+
   return (
     <>
       <div className="app">
@@ -62,6 +87,7 @@ export const TodosCont = () => {
               createdAt={todo.createdAt}
               updatedAt={todo.updatedAt}
               handelDelete={handelDelete}
+              handleEdit={handleEdit}
             />
           ))}
         </TodoColoum>
@@ -69,13 +95,14 @@ export const TodosCont = () => {
           {lists.inProgress.map((todo) => (
             <Todo
               key={todo._id}
-              statusClass="yellow"
+              statusClass="purple"
               id={todo._id}
               title={todo.title}
               description={todo.description}
               createdAt={todo.createdAt}
               updatedAt={todo.updatedAt}
               handelDelete={handelDelete}
+              handleEdit={handleEdit}
             />
           ))}
         </TodoColoum>
@@ -90,11 +117,20 @@ export const TodosCont = () => {
               createdAt={todo.createdAt}
               updatedAt={todo.updatedAt}
               handelDelete={handelDelete}
+              handleEdit={handleEdit}
             />
           ))}
         </TodoColoum>
       </div>
-      <CreateTodoCont updateTodoState={setTodos} />
+      {!showEditForm && <CreateTodoCont updateTodoState={setTodos} />}
+
+      <EditTodoCont
+        updateTodoState={setTodos}
+        showEditForm={showEditForm}
+        setShowEditForm={setShowEditForm}
+        currentEditId={currentEditId}
+        todos={todos}
+      />
     </>
   );
 };

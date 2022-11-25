@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import React, { memo } from "react";
 
 export const Todo = memo(
@@ -11,6 +11,7 @@ export const Todo = memo(
     updatedAt,
     statusClass,
     handelDelete,
+    handleEdit,
   }) => {
     return (
       <li data-id={id} className={`${statusClass} todoElement`}>
@@ -19,6 +20,7 @@ export const Todo = memo(
         <p className="createdAt">createdAt: {createdAt}</p>
         <p className="updatedAt">updatedAt: {updatedAt}</p>
         <FontAwesomeIcon onClick={() => handelDelete(id)} icon={faTrashCan} />
+        <FontAwesomeIcon onClick={() => handleEdit(id)} icon={faEdit} />
       </li>
     );
   }
