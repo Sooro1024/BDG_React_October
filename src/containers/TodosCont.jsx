@@ -56,21 +56,6 @@ export const TodosCont = () => {
   const handleEdit = useCallback(async (id) => {
     setShowEditForm(true);
     setCurrentEditId(id);
-    // try {
-    //   console.log("OLD VALUES");
-    //   await networkProvider.put(`/todos/${id}`, {
-    // userName: "EDITEDEDITED",
-    // description: "EDITEDEDITED",
-    // title: "EDITEDEDITED",
-    // status: "todo",
-    //   });
-    //   console.log("IIDDDDDD");
-    //   console.log(id);
-
-    //   // setTodos((prevTodos) => prevTodos.find((el) => el._id === id));
-    // } catch (error) {
-    //   console.log(error);
-    // }
   });
 
   return (
