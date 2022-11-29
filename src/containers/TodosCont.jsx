@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Button } from "reactstrap";
 import { Todo } from "../components/Todo";
 import { networkProvider } from "../network";
 import { CreateTodoCont } from "./CreateTodoCont";
 import { TodoColoum } from "./TodoColoum";
 
 export const TodosCont = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [todos, setTodos] = useState([]);
+  const [updateBody, setUpdateBody] = useState({});
 
   const lists = useMemo(() => {
     return todos.reduce(
@@ -39,6 +42,21 @@ export const TodosCont = () => {
       });
   }, []);
 
+  const setNewTodos = useCallback((data) => {
+    setIsOpen(!isOpen);
+    setTodos(data);
+  }, []);
+
+  const handelEdit = useCallback((data) => {
+    console.log(data, "edited data");
+    setIsOpen(true);
+    setUpdateBody(data);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
   const handelDelete = useCallback(async (id) => {
     try {
       await networkProvider.delete(`/todos/${id}`);
@@ -62,6 +80,7 @@ export const TodosCont = () => {
               createdAt={todo.createdAt}
               updatedAt={todo.updatedAt}
               handelDelete={handelDelete}
+              handelEdit={handelEdit}
             />
           ))}
         </TodoColoum>
@@ -76,6 +95,7 @@ export const TodosCont = () => {
               createdAt={todo.createdAt}
               updatedAt={todo.updatedAt}
               handelDelete={handelDelete}
+              handelEdit={() => setIsOpen(true)}
             />
           ))}
         </TodoColoum>
@@ -90,11 +110,20 @@ export const TodosCont = () => {
               createdAt={todo.createdAt}
               updatedAt={todo.updatedAt}
               handelDelete={handelDelete}
+              handelEdit={() => setIsOpen(true)}
             />
           ))}
         </TodoColoum>
       </div>
-      <CreateTodoCont updateTodoState={setTodos} />
+      <Button onClick={() => setIsOpen(true)}>Create new Todo</Button>
+      {isOpen ? (
+        <CreateTodoCont
+          updateTodoState={setNewTodos}
+          isOpen={isOpen}
+          todoData={updateBody}
+          setIsOpen={closeModal}
+        />
+      ) : null}
     </>
   );
 };
