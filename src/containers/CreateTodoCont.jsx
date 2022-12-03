@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Button,
   FormGroup,
@@ -9,13 +10,12 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
-import { UserContext } from "../context/userName";
 import { networkProvider } from "../network";
 
 export const CreateTodoCont = ({ updateTodoState }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const userName = useContext(UserContext);
+  const userName = useSelector((state) => state.user.personalInfo.name);
 
   const [formValues, setFormValues] = useState({
     userName: "",

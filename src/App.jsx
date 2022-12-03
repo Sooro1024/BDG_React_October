@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
+import { Provider } from "react-redux";
 import { TodosCont } from "./containers/TodosCont";
 import { UserCont } from "./containers/UserCont";
-import { UserContext } from "./context/userName";
+import store from "./reduxStor";
 
 const App = () => {
-  const [userName, setUserName] = useState("");
-
   return (
-    <UserContext.Provider value={userName}>
-      <UserCont userName={userName} setUserName={setUserName} />
+    <Provider store={store}>
+      <UserCont />
       <TodosCont />
-    </UserContext.Provider>
+    </Provider>
   );
 };
 
