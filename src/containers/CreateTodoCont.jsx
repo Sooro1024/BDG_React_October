@@ -11,11 +11,12 @@ import {
   ModalHeader,
 } from "reactstrap";
 import { networkProvider } from "../network";
+import { userNameSelector } from "../store/user/seletor";
 
 export const CreateTodoCont = ({ updateTodoState }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const userName = useSelector((state) => state.user.personalInfo.name);
+  const userName = useSelector(userNameSelector);
 
   const [formValues, setFormValues] = useState({
     userName: "",

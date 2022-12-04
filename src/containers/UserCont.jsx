@@ -8,11 +8,8 @@ import {
   Button,
 } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-
-const changeUserName = (payload) => ({
-  type: "",
-  payload,
-});
+import { changeUserNameAction } from "../store/user/actions";
+import { userNameSelector } from "../store/user/seletor";
 
 export const UserCont = () => {
   const [open, setOpen] = useState(false);
@@ -23,7 +20,7 @@ export const UserCont = () => {
     }, 2000);
   }, []);
 
-  const userName = useSelector((state) => state.user.personalInfo.name);
+  const userName = useSelector(userNameSelector);
   const dispatch = useDispatch();
 
   return (
@@ -33,9 +30,7 @@ export const UserCont = () => {
         Hi dear user, please fill your name
         <Input
           value={userName}
-          onChange={(ev) =>
-            dispatch({ type: "CHANGE_USER_NAME", payload: ev.target.value })
-          }
+          onChange={(ev) => dispatch(changeUserNameAction(ev))}
         />
       </ModalBody>
       <ModalFooter>
