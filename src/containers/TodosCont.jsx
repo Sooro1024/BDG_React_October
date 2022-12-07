@@ -1,11 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Todo } from "../components/Todo";
 import { networkProvider } from "../network";
+import { getTodosAction, handelDeleteAction } from "../store/todo/actions";
 import { CreateTodoCont } from "./CreateTodoCont";
 import { TodoColoum } from "./TodoColoum";
+import { todoSelector } from "../store/todo/selectors";
 
 export const TodosCont = () => {
-  const [todos, setTodos] = useState([]);
+  const dispatch = useDispatch();
+
+  const todos = useSelector(todoSelector);
 
   const lists = useMemo(() => {
     return todos.reduce(
@@ -29,24 +34,14 @@ export const TodosCont = () => {
   }, [todos]);
 
   useEffect(() => {
-    networkProvider
-      .get("/todos")
-      .then(({ data }) => {
-        setTodos(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  const handelDelete = useCallback(async (id) => {
-    try {
-      await networkProvider.delete(`/todos/${id}`);
-      setTodos((prevTodos) => prevTodos.filter((el) => el._id !== id));
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+    dispatch(getTodosAction());
+  }, [dispatch]);
+  const handelDelete = (id) => {
+    dispatch(handelDeleteAction(id));
+  };
+  const handelEdit = (id) => {
+    dispatch(handelEditAction(id));
+  };
 
   return (
     <>
@@ -55,13 +50,14 @@ export const TodosCont = () => {
           {lists.todo.map((todo) => (
             <Todo
               key={todo._id}
-              statusClass="red"
+              color="danger"
               id={todo._id}
               title={todo.title}
               description={todo.description}
               createdAt={todo.createdAt}
               updatedAt={todo.updatedAt}
               handelDelete={handelDelete}
+              handelEdit={handelEdit}
             />
           ))}
         </TodoColoum>
@@ -69,13 +65,13 @@ export const TodosCont = () => {
           {lists.inProgress.map((todo) => (
             <Todo
               key={todo._id}
-              statusClass="yellow"
+              color="warning"
               id={todo._id}
               title={todo.title}
               description={todo.description}
               createdAt={todo.createdAt}
               updatedAt={todo.updatedAt}
-              handelDelete={handelDelete}
+              handelEdit={handelEdit}
             />
           ))}
         </TodoColoum>
@@ -83,18 +79,18 @@ export const TodosCont = () => {
           {lists.done.map((todo) => (
             <Todo
               key={todo._id}
-              statusClass="green"
+              color="success"
               id={todo._id}
               title={todo.title}
               description={todo.description}
               createdAt={todo.createdAt}
               updatedAt={todo.updatedAt}
-              handelDelete={handelDelete}
+              handelEdit={handelEdit}
             />
           ))}
         </TodoColoum>
       </div>
-      <CreateTodoCont updateTodoState={setTodos} />
+      <CreateTodoCont updateTodoState={() => {}} />
     </>
   );
 };

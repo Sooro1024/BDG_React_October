@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { todoSelector } from "./selectors";
+import { SET_TODOS } from "./type";
 import {
   Button,
   FormGroup,
@@ -10,56 +10,32 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
-import { networkProvider } from "../network";
-import { userNameSelector } from "../store/user/seletor";
 
-export const CreateTodoCont = ({ updateTodoState }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const setTodosAction = (todo) => ({ type: SET_TODOS, payload: todo });
 
-  const userName = useSelector(userNameSelector);
+const handelDeleteAction = (id) => async (dispatch, getState, extraArgs) => {
+  try {
+    await extraArgs.networkProvider.delete(`/todos/${id}`);
+    const todos = todoSelector(getState()).filter((todo) => {
+      return todo._id !== id;
+    });
+    dispatch(setTodosAction(todos));
 
-  const [formValues, setFormValues] = useState({
-    userName: "",
-    description: "",
-    title: "",
-    status: "todo",
-  });
-
-  useEffect(() => {
-    setFormValues((prev) => ({ ...prev, userName }));
-  }, [userName]);
-
-  const handelSave = (ev) => {
-    ev.preventDefault();
-    networkProvider
-      .post("/todos", formValues)
-      .then(({ data }) => {
-        updateTodoState((prevTodos) => [...prevTodos, data]);
-        setIsOpen(false);
-        setFormValues({
-          userName: "",
-          description: "",
-          title: "",
-          status: "todo",
-        });
-      })
-      .catch((error) => console.log(error));
-  };
-  const handelCancel = () => {
-    setIsOpen(false);
-  };
-
-  const handelChangeValues = (ev) => {
-    setFormValues((prevFormState) => ({
-      ...prevFormState,
-      [ev.target.name]: ev.target.value,
-    }));
-  };
-
-  return (
-    <>
-      <Button onClick={() => setIsOpen(true)}>Create new Todo</Button>
-      <Modal isOpen={isOpen} toggle={() => setIsOpen(false)}>
+    // setTodos((prevTodos) => prevTodos.filter((el) => el._id !== id));
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+  }
+};
+const handelEditAction = (id) => async (dispatch, getState, extraArgs) => {
+  try {
+    await extraArgs.networkProvider.delete(`/todos/${id}`);
+    const [isOpen, setIsOpen] = useState(false);
+    const todos = todoSelector(getState());
+    const editTodo = todos.find(todo => todo.id == id);
+    setIsOpen(true);
+    return(
+    <Modal isOpen={isOpen} toggle={() => setIsOpen(false)}>
         <ModalHeader toggle={() => setIsOpen(false)}>
           Create new Todo
         </ModalHeader>
@@ -71,7 +47,7 @@ export const CreateTodoCont = ({ updateTodoState }) => {
               disabled={!!userName}
               name="userName"
               onChange={handelChangeValues}
-              value={formValues.userName}
+              value={editTodo.userName}
             />
             <Label for="userName">Username</Label>
           </FormGroup>
@@ -81,7 +57,7 @@ export const CreateTodoCont = ({ updateTodoState }) => {
               placeholder="Description"
               name="description"
               onChange={handelChangeValues}
-              value={formValues.description}
+              value={editTodo.description}
             />
             <Label for="description">Description</Label>
           </FormGroup>
@@ -91,7 +67,7 @@ export const CreateTodoCont = ({ updateTodoState }) => {
               placeholder="Title"
               name="title"
               onChange={handelChangeValues}
-              value={formValues.title}
+              value={editTodo.title}
             />
             <Label for="title">Title</Label>
           </FormGroup>
@@ -102,7 +78,7 @@ export const CreateTodoCont = ({ updateTodoState }) => {
               type="select"
               name="status"
               onChange={handelChangeValues}
-              value={formValues.status}
+              value={editTodo.status}
             >
               <option value="todo">Todo</option>
               <option value="in progress">In progress</option>
@@ -120,6 +96,20 @@ export const CreateTodoCont = ({ updateTodoState }) => {
           </Button>
         </ModalFooter>
       </Modal>
-    </>
-  );
+      );
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+  }
 };
+
+export const getTodosAction = () => async (dispatch, getState, extraArgs) => {
+  try {
+    const { data } = await extraArgs.networkProvider.get("/todos");
+    dispatch(setTodosAction(data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { handelDeleteAction };

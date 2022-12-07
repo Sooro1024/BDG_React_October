@@ -1,32 +1,57 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import React, { memo, useState } from "react";
+import { faTrashCan,faEdit } from "@fortawesome/free-solid-svg-icons";
+import React, { memo } from "react";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardText,
+  CardTitle,
+  CardSubtitle,
+  Button,
+  CardFooter,
+} from "reactstrap";
 
-export const Todo = memo(
-  ({
-    id,
-    title,
-    description,
-    createdAt,
-    updatedAt,
-    statusClass,
-    handelDelete,
-  }) => {
-    const [Title,setTitle]=useState(title);
-    const [Description,setDescription]=useState(description);
- console.log(description)
-    return (
-      <li data-id={id} className={`${statusClass} todoElement`}>
-        {Title}
-        <p className="description">{Description}</p>
-        <p className="createdAt">createdAt: {createdAt}</p>
-        <p className="updatedAt">updatedAt: {updatedAt}</p>
-        <input placeholder="Edit:Title" onChange={(e)=>setTitle(e.target.value)}/>
-        <input placeholder="Edit:Description" onChange={(e)=>setDescription(e.target.value)}/>
-        <FontAwesomeIcon onClick={() => handelDelete(id)} icon={faTrashCan} />
-      </li>
-    );
-  }
+const TodoComp = ({
+  id,
+  title,
+  description,
+  userName,
+  createdAt,
+  updatedAt,
+  color,
+  handelDelete,
+  handelEdit,
+}) => (
+  <Card className="m-2" color={color} inverse>
+    <CardHeader>{title}</CardHeader>
+    <CardBody>
+      <CardTitle tag="h4">{userName}</CardTitle>
+      <CardText tag="h5">{description}</CardText>
+      <CardSubtitle tag="h6">
+        createdAt: {new Date(createdAt).toLocaleString()}
+      </CardSubtitle>
+      <CardSubtitle tag="h6">updatedAt: {updatedAt}</CardSubtitle>
+    </CardBody>
+    <CardFooter>
+      <Button color="primary">
+        Delete
+        <FontAwesomeIcon
+          className="ms-3"
+          onClick={() => handelDelete(id)}
+          icon={faTrashCan}
+        />
+      </Button>
+      <Button color="primary" style={{position:"relative", left:"220px"}}>
+        Edit
+        <FontAwesomeIcon
+          className="ms-3"
+          onClick={() => handelEdit(id)}
+          icon={faEdit}
+        />
+      </Button>
+    </CardFooter>
+  </Card>
 );
 
-export default Todo
+export const Todo = memo(TodoComp);
