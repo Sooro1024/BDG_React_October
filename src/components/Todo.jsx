@@ -24,7 +24,7 @@
 //   updatedAt,
 //   color,
 //   handelDelete,
-// }) => 
+// }) =>
 // {
 // // const [inputName, setName] = useState(userName);
 // const [inputTitle, setTitle] = useState(title);
@@ -42,7 +42,7 @@
 //   setDec((prevStat) => ev.target.value);
 // };
 // (
-  
+
 //   <Card className="m-2" color={color} inverse>
 //     <CardHeader>{title}</CardHeader>
 //     <CardBody>
@@ -73,7 +73,6 @@
 
 // export const Todo = memo(TodoComp);
 
-
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import React, { memo, useState } from "react";
@@ -96,7 +95,7 @@ export const Todo = memo(
     const [inputTitle, setTitle] = useState(title);
     const [inputDec, setDec] = useState(description);
     const [update, setUpdate] = useState();
-    const [newElement, setNewElement] = useState()
+    const [newElement, setNewElement] = useState();
 
     const hendelEditChange1 = (ev) => {
       setTitle((prevStat) => ev.target.value);
@@ -133,29 +132,37 @@ export const Todo = memo(
         {/* <p className="updatedAt">updatedAt: {updatedAt}</p> */}
 
         {/* <div className="modal"> */}
-    
-          <input type="text" placeholder={title} onChange={hendelEditChange1} />
-          <input
-            type="text"
-            placeholder={userName}
-            onChange={hendelEditChange2}
-          />
-          <input
-            type="text"
-            placeholder={description}
-            onChange={hendelEditChange3}
-          />
-       {/* 
+
+        <input type="text" placeholder={title} onChange={hendelEditChange1} />
+        <input
+          type="text"
+          placeholder={userName}
+          onChange={hendelEditChange2}
+        />
+        <input
+          type="text"
+          placeholder={description}
+          onChange={hendelEditChange3}
+        />
+        {/* 
           <button name={id} onClick={hendelAdd} update={new Date()}>
             Edit
           </button>
           <button onClick={()=>handelEdit(newElement)}>SaveEdit</button>  */}
 
-
         {/* </div> */}
-               <button  name={id}  update={new Date()} onClick={()=>handelEdit(inputTitle,inputName,inputDec,id)}>SaveEdit</button>
-        <button onClick={() => handelDelete(id)} icon={faTrashCan} >Delete </button>
+        <button
+          name={id}
+          update={new Date()}
+          onClick={() => handelEdit(inputTitle, inputName, inputDec, id)}
+        >
+          SaveEdit
+        </button>
+        <button onClick={() => handelDelete(id)} icon={faTrashCan}>
+          Delete{" "}
+        </button>
       </li>
     );
   }
 );
+Todo.displayName = "Todo";
