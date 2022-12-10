@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { connect } from "react-redux";
 import { Todo } from "../components/Todo";
-import { networkProvider } from "../network";
 import {
   getTodosAction,
   handelDeleteAction,
@@ -11,93 +10,104 @@ import { CreateTodoCont } from "./CreateTodoCont";
 import { TodoColoum } from "./TodoColoum";
 import { todoSelector } from "../store/todo/selectors";
 
-export const TodosCont = () => {
-  const dispatch = useDispatch();
+class TodosComp extends React.Component {
+  componentDidMount() {
+    this.props.getTodosOnMount();
+  }
 
-  const todos = useSelector(todoSelector);
+  render() {
+    // eslint-disable-next-line react/destructuring-assignment
 
-  const lists = useMemo(() => {
-    return todos.reduce(
-      (acc, el) => {
-        if (el.status === "in progress") {
-          acc.inProgress.push(el);
-        } else if (el.status === "done") {
-          acc.done.push(el);
-        } else {
-          acc.todo.push(el);
-        }
-
-        return acc;
-      },
-      {
-        done: [],
-        inProgress: [],
-        todo: [],
-      }
+    return (
+      <>
+        <div className="app">
+          <TodoColoum title="Todo">
+            {this.props.lists.todo.map((todo) => (
+              <Todo
+                key={todo._id}
+                color="danger"
+                id={todo._id}
+                title={todo.title}
+                description={todo.description}
+                createdAt={todo.createdAt}
+                updatedAt={todo.updatedAt}
+                handelDelete={this.props.handelDelete}
+                handelEdit={this.props.handelEdit}
+              />
+            ))}
+          </TodoColoum>
+          <TodoColoum title="In progress">
+            {this.props.lists.inProgress.map((todo) => (
+              <Todo
+                key={todo._id}
+                color="warning"
+                id={todo._id}
+                title={todo.title}
+                description={todo.description}
+                createdAt={todo.createdAt}
+                updatedAt={todo.updatedAt}
+                handelDelete={this.props.handelDelete}
+                handelEdit={this.props.handelEdit}
+              />
+            ))}
+          </TodoColoum>
+          <TodoColoum title="Done">
+            {this.props.lists.done.map((todo) => (
+              <Todo
+                key={todo._id}
+                color="success"
+                id={todo._id}
+                title={todo.title}
+                description={todo.description}
+                createdAt={todo.createdAt}
+                updatedAt={todo.updatedAt}
+                handelDelete={this.props.handelDelete}
+                handelEdit={this.props.handelEdit}
+              />
+            ))}
+          </TodoColoum>
+        </div>
+        <CreateTodoCont />
+      </>
     );
-  }, [todos]);
+  }
+}
 
-  useEffect(() => {
-    dispatch(getTodosAction());
-  }, [dispatch]);
-  const handelDelete = (id) => {
-    dispatch(handelDeleteAction(id));
-  };
+const mapsStateToProps = (state, ownProps) => {
+  const todos = todoSelector(state);
 
-  const handelEdit = (inputTitle, inputName, inputDec, id) => {
-    dispatch(handelEditAction(inputTitle, inputName, inputDec, id));
-  };
+  const lists = todos.reduce(
+    (acc, el) => {
+      if (el.status === "in progress") {
+        acc.inProgress.push(el);
+      } else if (el.status === "done") {
+        acc.done.push(el);
+      } else {
+        acc.todo.push(el);
+      }
 
-  return (
-    <>
-      <div className="app">
-        <TodoColoum title="Todo">
-          {lists.todo.map((todo) => (
-            <Todo
-              key={todo._id}
-              color="danger"
-              id={todo._id}
-              title={todo.title}
-              description={todo.description}
-              createdAt={todo.createdAt}
-              updatedAt={todo.updatedAt}
-              handelDelete={handelDelete}
-              handelEdit={handelEdit}
-            />
-          ))}
-        </TodoColoum>
-        <TodoColoum title="In progress">
-          {lists.inProgress.map((todo) => (
-            <Todo
-              key={todo._id}
-              color="warning"
-              id={todo._id}
-              title={todo.title}
-              description={todo.description}
-              createdAt={todo.createdAt}
-              updatedAt={todo.updatedAt}
-              handelDelete={handelDelete}
-              handelEdit={handelEdit}
-            />
-          ))}
-        </TodoColoum>
-        <TodoColoum title="Done">
-          {lists.done.map((todo) => (
-            <Todo
-              key={todo._id}
-              color="success"
-              id={todo._id}
-              title={todo.title}
-              description={todo.description}
-              createdAt={todo.createdAt}
-              updatedAt={todo.updatedAt}
-              handelDelete={handelDelete}
-              handelEdit={handelEdit}
-            />
-          ))}
-        </TodoColoum>
-      </div>
-      <CreateTodoCont />
-    </>
+      return acc;
+    },
+    {
+      done: [],
+      inProgress: [],
+      todo: [],
+    }
   );
+  return {
+    lists,
+  };
 };
+const mapDispatchToProps = {
+  handelDelete: (id) => {
+    handelDeleteAction(id);
+  },
+  handelEdit: (inputTitle, inputName, inputDec, id) => {
+    handelEditAction(inputTitle, inputName, inputDec, id);
+  },
+  getTodosOnMount: () => getTodosAction(),
+};
+export const TodosCont = connect(
+  mapsStateToProps,
+  mapDispatchToProps
+)(TodosComp);
