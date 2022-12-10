@@ -13,7 +13,8 @@ import {
 // import { networkProvider } from "../network";
 import { userNameSelector } from "../store/user/seletor";
 
-import {getTodosAction, handelSaveAction} from '../store/todo/actions'
+import { getTodosAction, handelSaveAction } from "../store/todo/actions";
+import { todoSelector } from "../store/todo/selectors";
 
 export const CreateTodoCont = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,18 +27,11 @@ export const CreateTodoCont = () => {
     title: "",
     status: "todo",
   });
-  const dispatch = useDispatch()
-
-  
-
-  // useEffect(() => {
-  //   dispatch(getTodosAction());
-  // }, [dispatch]);
+  const dispatch = useDispatch();
 
   const handelSave = (ev) => {
     // ev.preventDefault()
-       dispatch(handelSaveAction(formValues))
-       .then(()=>{
+    dispatch(handelSaveAction(formValues)).then(() => {
       setFormValues({
         userName: "",
         description: "",
@@ -46,17 +40,7 @@ export const CreateTodoCont = () => {
       });
       setIsOpen(false);
     });
-    // setFormValues({
-    //   userName: "",
-    //   description: "",
-    //   title: "",
-    //   status: "todo",
-    // });
-    // setIsOpen(false);
   };
-
-
-
 
   const handelCancel = () => {
     setIsOpen(false);

@@ -11,9 +11,9 @@ const handelSaveAction = (data) => async (dispatch, getState, extraArgs) => {
     console.log(newTodo)
     console.log(currentToDos)
 
-    const todoss = [...currentToDos, newTodo]
+    const todoss = [...currentToDos, data]
     console.log(todoss)
-    dispatch(setTodosAction([newTodo]))
+    dispatch(setTodosAction(todoss))
 
   } catch (error) {
     console.log("error")
