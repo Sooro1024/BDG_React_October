@@ -97,7 +97,7 @@ export const TodosCont = () => {
           ))}
         </TodoColoum>
       </div>
-      <CreateTodoCont updateTodoState={() => {}} />
+      <CreateTodoCont  />
     </>
   );
 };

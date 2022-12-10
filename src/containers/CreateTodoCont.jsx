@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   FormGroup,
@@ -10,10 +10,12 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
-import { networkProvider } from "../network";
+// import { networkProvider } from "../network";
 import { userNameSelector } from "../store/user/seletor";
 
-export const CreateTodoCont = ({ updateTodoState }) => {
+import {getTodosAction, handelSaveAction} from '../store/todo/actions'
+
+export const CreateTodoCont = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const userName = useSelector(userNameSelector);
@@ -24,27 +26,38 @@ export const CreateTodoCont = ({ updateTodoState }) => {
     title: "",
     status: "todo",
   });
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    setFormValues((prev) => ({ ...prev, userName }));
-  }, [userName]);
+  
+
+  // useEffect(() => {
+  //   dispatch(getTodosAction());
+  // }, [dispatch]);
 
   const handelSave = (ev) => {
-    ev.preventDefault();
-    networkProvider
-      .post("/todos", formValues)
-      .then(({ data }) => {
-        updateTodoState((prevTodos) => [...prevTodos, data]);
-        setIsOpen(false);
-        setFormValues({
-          userName: "",
-          description: "",
-          title: "",
-          status: "todo",
-        });
-      })
-      .catch((error) => console.log(error));
+    // ev.preventDefault()
+       dispatch(handelSaveAction(formValues))
+       .then(()=>{
+      setFormValues({
+        userName: "",
+        description: "",
+        title: "",
+        status: "todo",
+      });
+      setIsOpen(false);
+    });
+    // setFormValues({
+    //   userName: "",
+    //   description: "",
+    //   title: "",
+    //   status: "todo",
+    // });
+    // setIsOpen(false);
   };
+
+
+
+
   const handelCancel = () => {
     setIsOpen(false);
   };

@@ -3,6 +3,24 @@ import { SET_TODOS } from "./type";
 
 const setTodosAction = (todo) => ({ type: SET_TODOS, payload: todo });
 
+const handelSaveAction = (data) => async (dispatch, getState, extraArgs) => {
+  try {
+    const newTodo = await extraArgs.networkProvider.post("/todos", data)
+    const currentToDos = todoSelector(getState())
+
+    console.log(newTodo)
+    console.log(currentToDos)
+
+    const todoss = [...currentToDos, newTodo]
+    console.log(todoss)
+    dispatch(setTodosAction([newTodo]))
+
+  } catch (error) {
+    console.log("error")
+  }
+
+
+}
 
 const handelEditAction = (inputTitle, inputName, inputDec, id) => async (dispatch, getState, extraArgs) => {
 
@@ -52,4 +70,4 @@ export const getTodosAction = () => async (dispatch, getState, extraArgs) => {
   }
 };
 
-export { handelDeleteAction, handelEditAction };
+export { handelDeleteAction, handelEditAction, handelSaveAction };
